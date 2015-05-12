@@ -4,7 +4,7 @@ Sometimes one needs to explain the dynamic behaviour of a molecule without showi
 
 <img src="examples/output.png"/>
 
-This script will invoke VMD to render the picture, and image magick to do the tle composition. This means you need to have both installed and accessible if you want to use this script out of the box. 
+This script will invoke VMD to render the picture, and ImageMagick to do the the composition. This means you need to have both installed and accessible if you want to use this script out of the box. 
 
 ##Parameters
  
@@ -14,7 +14,7 @@ This script will invoke VMD to render the picture, and image magick to do the tl
 * -f: The number of frames of the trajectory one wants to extract. For instance, if a trajectory contains 10 frames and we specify we want 5, it will extract frames 0,2,4,6 and 8. If not provided, it will use all frames.
 * -s: The grid dimensions for the tiled image as 'number_of_rows,number_of_columns'.     
 
-The example was generated using:
+The example can be reproduced by issuing this line in the *examples* directory:
 ```bash 
 > python take_snapshots.py -i test.pdb -v visual.vmd -s 3,2 -f 6 -o output.png
 ```
