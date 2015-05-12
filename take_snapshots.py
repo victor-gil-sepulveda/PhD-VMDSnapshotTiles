@@ -54,21 +54,26 @@ exit
     for i in range(0, num_models, the_step):
         vis_file_path = os.path.join(dir_path, "%d.vis"%i)
         vis_file = open(vis_file_path, "w")
-        images.append(os.path.join(dir_path, "im_%03d.tga"%i))
-        vis_file.write(new_vis%(i, i, i, images[-1]))
+        image_name = "%03d.tga"%i
+        conv_image_name = "%03d.png"%i
+        image_path = os.path.join(dir_path, image_name)
+        conv_image_path = os.path.join(dir_path, conv_image_name)
+        vis_file.write(new_vis%(i, i, i, image_path))
         vis_file.close()
-        #call vmd
         os.system("vmd -dispdev none -e %s"%vis_file_path)
+        os.system("convert -gravity North -pointsize 30 -annotate +0+10 '%d'  %s %s"%(i,
+                                                 image_path, 
+                                                 conv_image_path))
     print  dir_path
     
     #mount everything
-    images_glob = os.path.join(dir_path, "im_???.tga")
-    os.system("montage -label '%%f' -mode concatenate -tile %dx%d %s out.tga"%(
+    images_glob = os.path.join(dir_path, "???.png")
+    os.system("montage %s -mode concatenate  -tile %dx%d  %s"%(
+                                                                  images_glob,
                                                                   options.dim[0],
                                                                   options.dim[1],
-                                                                  images_glob
+                                                                  options.output
                                                                   ))
-    os.system("convert out.tga out.png")
     
     shutil.rmtree(dir_path)
         
