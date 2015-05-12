@@ -16,5 +16,5 @@ This script will invoke VMD to render the picture, and image magick to do the tl
 
 The example was generated using:
 ```bash 
-> python /home/user/git/PhD-VMDSnapshotTiles/take_snapshots.py -i test.pdb -v visual.vmd -s 3,2 -f 6 -o output.png
+> python take_snapshots.py -i test.pdb -v visual.vmd -s 3,2 -f 6 -o output.png
 ```
