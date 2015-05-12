@@ -25,15 +25,21 @@ if __name__ == '__main__':
     # Check number of frames
     num_models = int(subprocess.check_output(["egrep", "-c", "^MODEL", options.input])) 
     
+    if options.num_frames is None:
+        target_num_frames = num_models
+    else:
+        target_num_frames = options.num_frames
+
     # Calculate the step
-    the_step = int(math.floor(float(num_models)/options.num_frames))
+    the_step = int(math.floor(float(num_models)/target_num_frames))
 
     # Generate the new vis file
     if options.vmd_vis is not None:
         vmd_vis = open(options.vmd_vis,"r").read()
     else: 
-        vmd_vis = ""
-        
+        vmd_vis = "mol load pdb %s\n"%options.input
+    
+    
     new_vis_lines = """# Fit molecules (from vmd tuts.)
 set reference_sel  [atomselect top "protein" frame 0]
 set comparison_sel [atomselect top "protein" frame %d]
@@ -46,6 +52,7 @@ animate goto %d
 render TachyonInternal %s
 exit
 """
+    vmd_vis = vmd_vis.replace("%", "%%")
     new_vis = vmd_vis + new_vis_lines
 
     # Execute the vis file and render
@@ -58,7 +65,8 @@ exit
         conv_image_name = "%03d.png"%i
         image_path = os.path.join(dir_path, image_name)
         conv_image_path = os.path.join(dir_path, conv_image_name)
-        vis_file.write(new_vis%(i, i, i, image_path))
+        new_vis_contents = new_vis%(i, i, i, image_path)
+        vis_file.write(new_vis_contents)
         vis_file.close()
         os.system("vmd -dispdev none -e %s"%vis_file_path)
         os.system("convert -gravity North -pointsize 30 -annotate +0+10 '%d'  %s %s"%(i,
